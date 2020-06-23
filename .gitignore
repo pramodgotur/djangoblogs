@@ -1,0 +1,9 @@
+**__pycache__
+*.pyc
+migrations
+djangoblogs/media/
+__pycache__
+/*/*/__pycache__
+/*/__pycache__
+__pycache__
+db.sqlite3
