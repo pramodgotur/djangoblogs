@@ -8,19 +8,18 @@
     </p>
   </div>
 </div>
-<div class="row">
-  {% for post in posts %}
-  <div class="col-md-3">
-    <div class="card">
+
+{% for post in posts %}
+<div class="card mb-3">
+  <div class="card-horizontal">
+    <div class="img-square-wrapper">
       <img class="card-img-top" src="{{post.image.url}}" alt="Card image cap" />
-      <div class="card-body">
-        <h5 class="card-title">{{post.title}}</h5>
-        <p class="card-text">{{ post.content}}</p>
-        <a href="/blog-detail/{{post.id}}/" class="btn btn-primary">Read more...</a>
-      </div>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{post.title}}</h5>
+      <p class="card-text">{{ post.content}}</p>
+      <a href="/blog-detail/{{post.id}}/" class="btn btn-primary">Read more...</a>
     </div>
   </div>
-  {% endfor %}
 </div>
-
-{% endblock %}
+{% endfor %} {% endblock %}
