@@ -3,15 +3,18 @@ from blog.models import Post
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def blogs_view(request):
     context = {}
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-created_at')
     context['posts'] = posts
     return render(request, "home.html", context)
 
 
+@login_required
 def blog_detail_view(request, pk):
     context = {}
     post = get_object_or_404(Post, pk=pk)
@@ -19,6 +22,7 @@ def blog_detail_view(request, pk):
     return render(request, "blog-detail.html", context)
 
 
+@login_required
 def my_posts(request):
     context = {}
     posts = Post.objects.filter(author=request.user).order_by('-created_at')
@@ -26,6 +30,7 @@ def my_posts(request):
     return render(request, "my-posts.html", context)
 
 
+@login_required
 @csrf_exempt
 @require_http_methods(['GET', 'POST'])
 def add_post(request):
@@ -46,6 +51,7 @@ def add_post(request):
     return render(request, "blog-add.html")
 
 
+@login_required
 @csrf_exempt
 @require_http_methods(['DELETE'])
 def delete_post(request, pk):
@@ -64,6 +70,7 @@ def delete_post(request, pk):
         return JsonResponse(context, status=404)
 
 
+@login_required
 @csrf_exempt
 @require_http_methods(['GET', 'POST'])
 def edit_post(request, pk):
