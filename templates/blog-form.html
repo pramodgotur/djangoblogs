@@ -1,0 +1,37 @@
+<form action="{{action}}" method="POST" id="{{id}}" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      name="title"
+      id="title"
+      placeholder="Enter title"
+      value="{{post.title}}"
+      required
+    />
+  </div>
+   {% if post.image %}
+   <p>Currently:</p>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="img-thumbnail ">
+        <img src="{{post.image.url}}" class="post-image"/>
+      </div>
+    </div>
+    <div class="col-md-8"></div>
+  </div>
+  {% endif %} 
+  <div class="form-group">
+    <label for="post-image">Please select Post Image</label>
+    <input type="file" class="form-control-file" id="post-image" name="post-image"  />
+  </div>
+
+  <div class="form-group">
+    <label for="post-content">Content</label>
+    <textarea class="form-control" id="post-content" name="content" rows="6" required>
+{{post.content}}</textarea
+    >
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

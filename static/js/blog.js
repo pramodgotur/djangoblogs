@@ -7,24 +7,7 @@ $("#new-post-form").submit(function (e) {
   var data = new FormData(form);
   var mimeType = file.type;
   if (mimeType.indexOf("image") >= 0 && mimeType != undefined) {
-    $.ajax({
-      url: actionUrl,
-      type: "post",
-      data: data,
-      enctype: "multipart/form-data",
-      processData: false,
-      contentType: false,
-      success: function (data) {
-        if (data.status) {
-          $("new-post-form").trigger("reset");
-          toastr.success(data.message);
-          window.location.href = "/my-posts/";
-        }
-      },
-      error: function (data) {
-        toastr.error(data.responseJSON.message);
-      },
-    });
+    post_data(actionUrl, data);
   } else {
     toastr.error("The file must be one of the following types: .png, .jpeg, .jpg.");
   }
@@ -61,4 +44,46 @@ $(document).on("click", ".delete-post", function (e) {
       toastr.error(data.responseJSON.message);
     },
   });
+});
+
+function post_data(actionUrl, data) {
+  $.ajax({
+    url: actionUrl,
+    type: "post",
+    data: data,
+    enctype: "multipart/form-data",
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      if (data.status) {
+        let post_id = data.data.post_id;
+        toastr.success(data.message);
+        window.location.href = "/blog-detail/" + post_id + "/";
+      }
+    },
+    error: function (data) {
+      toastr.error(data.responseJSON.message);
+    },
+  });
+}
+
+$("#edit-post-form").submit(function (e) {
+  e.preventDefault();
+  var actionUrl = e.currentTarget.action;
+  var input_file = document.getElementById("post-image");
+
+  file = input_file.files[0];
+  console.log(file);
+  var form = $("#edit-post-form")[0];
+  var data = new FormData(form);
+  if (file != undefined) {
+    var mimeType = file.type;
+    if (mimeType.indexOf("image") >= 0 && mimeType != undefined) {
+      post_data(actionUrl, data);
+    } else {
+      toastr.error("The file must be one of the following types: .png, .jpeg, .jpg.");
+    }
+  } else {
+    post_data(actionUrl, data);
+  }
 });

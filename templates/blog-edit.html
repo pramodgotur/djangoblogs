@@ -3,7 +3,9 @@
 <div class="card mb-5 mt-5 offset-md-2 col-md-8">
   <div class="card-body">
     <h2 class="card-title text-center">Add New Post</h2>
-    {% include "blog-form.html" with action="/add-post/" id="new-post-form"%}
+    {% with post_id=post.id|stringformat:"s/" %}
+     {% include "blog-form.html" with action="/edit-post/"|add:post_id id="edit-post-form" post=post%}
+    {% endwith %}
   </div>
 </div>
 

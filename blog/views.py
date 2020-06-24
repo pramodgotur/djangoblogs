@@ -27,6 +27,7 @@ def my_posts(request):
 
 
 @csrf_exempt
+@require_http_methods(['GET', 'POST'])
 def add_post(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -40,6 +41,7 @@ def add_post(request):
         post.save()
         context = {"status": True,
                    "message": "Post successfully added.", "data": {}}
+        context['data']['post_id'] = post.id
         return JsonResponse(context)
     return render(request, "blog-add.html")
 
@@ -60,3 +62,27 @@ def delete_post(request, pk):
         print(e)
         context["message"] = "Post not found"
         return JsonResponse(context, status=404)
+
+
+@csrf_exempt
+@require_http_methods(['GET', 'POST'])
+def edit_post(request, pk):
+    context = {}
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        post = Post.objects.get(pk=pk)
+        post.title = title
+        post.content = content
+        if request.FILES:
+            post_image = request.FILES['post-image']
+            post.image = post_image
+        post.author = request.user
+        post.save()
+        context = {"status": True,
+                   "message": "Post successfully updated.", "data": {}}
+        context['data']['post_id'] = post.id
+        return JsonResponse(context)
+    post = get_object_or_404(Post, pk=pk)
+    context['post'] = post
+    return render(request, "blog-edit.html", context)
