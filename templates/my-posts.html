@@ -1,13 +1,7 @@
 {% extends "layout.html" %} {% load static %} {% block content %}
-<div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4 text-center">Welcome to DjangoBlogs</h1>
-    <p class="lead text-center">
-      Publish/Post your idea, knowledge here..
-      <a href="/add-post/" class="btn btn-primary">Add New Post</a>
-    </p>
-  </div>
-</div>
+
+<h1 class="text-center">My Posts</h1>
+
 <div class="row">
   {% for post in posts %}
   <div class="col-md-3">
@@ -20,6 +14,19 @@
       </div>
     </div>
   </div>
+  {% empty%}
+  <div class="offset-md-3 col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <!-- <h5 class="card-title">Special title treatment</h5> -->
+        <p class="card-text">
+          You don't have posts yet...
+        </p>
+        <a href="/add-post/" class="btn btn-primary">Add New Post</a>
+      </div>
+    </div>
+  </div>
+
   {% endfor %}
 </div>
 

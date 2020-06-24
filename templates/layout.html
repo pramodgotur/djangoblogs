@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -13,6 +14,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     {% endblock %}
   </head>
   <body>
@@ -35,7 +37,10 @@
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
           {% if request.user.is_authenticated %}
-          <li class="nav-item active">
+          <li class="nav-item">
+            <a class="nav-link" href="/my-posts/">My Posts</span></a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/logout/">logout</span></a>
           </li>
           {% endif %}
@@ -44,24 +49,53 @@
         <span class="navbar-text pr-2">
           Welcome, {{ request.user.get_full_name }}
         </span>
-        <button class="btn btn-success" type="button">New Post</button>
+        <a href="/add-post/" class="btn btn-success" >New Post</a>
         {% endif %}
       </div>
     </nav>
-    <main role="main" class="container">
+    <main role="main" class="container mb-5 mt-5">
       {% if context.message %}
       <div class="alert alert-{{ context.messge_type }}" role="alert">
         {{ context.message }}
       </div>
-      {% endif %}{% block content %}{% endblock %}
+      {% endif %}
+      {% block content %}
+        {% if message %}
+        <div class="alert alert-success" role="alert">
+          {{ message}}
+        </div>
+        {% endif %}
+      {% endblock %}
     </main>
     <div id="footer">
       {% block footer %}
+      
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+      <script src="{% static 'js/blog.js'%}"></script>
       {% endblock %}
+      <script >
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+      </script>
     </div>
   </body>
 </html>
