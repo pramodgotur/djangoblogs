@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from blog.models import Post
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 
 def blogs_view(request):
@@ -41,3 +42,21 @@ def add_post(request):
                    "message": "Post successfully added.", "data": {}}
         return JsonResponse(context)
     return render(request, "blog-add.html")
+
+
+@csrf_exempt
+@require_http_methods(['DELETE'])
+def delete_post(request, pk):
+    context = {"status": True,
+               "message": "", "data": {}}
+    try:
+        post = Post.objects.get(pk=pk, author=request.user)
+        post.delete()
+        post_exists = Post.objects.filter(author=request.user).exists()
+        context['data']['post_exists'] = post_exists
+        context["message"] = "Post successfully deleted."
+        return JsonResponse(context, status=200)
+    except Exception as e:
+        print(e)
+        context["message"] = "Post not found"
+        return JsonResponse(context, status=404)
